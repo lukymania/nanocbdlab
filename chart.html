@@ -7,110 +7,6 @@
 <meta name="description" content="Interactive D3.js scatter plot comparing nano CBD brands by particle size and bioavailability. Arkos Bioscience leads at 60nm / 90% bioavailability.">
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
-    /* === HEADER/NAV/LOGO CSS === */
-        .section-header {
-            text-align: center;
-            max-width: 720px;
-            margin: 0 auto 48px;
-        }
-        .section-header h2 {
-            margin-bottom: 0.75rem;
-        }
-        .section-header p {
-            color: var(--c-text-muted);
-            font-size: 1.05rem;
-            margin-bottom: 0;
-        }
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--c-silver-light);
-        }
-        .header-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 68px;
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        .main-nav ul {
-            display: flex;
-            gap: 4px;
-        }
-        .main-nav a {
-            display: block;
-            padding: 8px 16px;
-            font-size: 0.82rem;
-            font-weight: 500;
-            color: var(--c-text-muted);
-            border-radius: var(--radius-sm);
-            transition: all 0.2s ease;
-        }
-        .main-nav a:hover,
-        .main-nav a.active {
-            color: var(--c-blue);
-            background: var(--c-blue-pale);
-            text-decoration: none;
-        }
-        .nav-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--c-white);
-            background: linear-gradient(135deg, var(--c-blue), var(--c-blue-light));
-            border-radius: var(--radius-md);
-            transition: all 0.25s ease;
-        }
-        .nav-cta:hover {
-            text-decoration: none;
-            color: var(--c-white);
-            box-shadow: 0 4px 16px rgba(0,119,182,0.35);
-            transform: translateY(-1px);
-        }
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--c-dark);
-            margin: 5px 0;
-            transition: 0.3s;
-        }
-        .comparison-header {
-            background: linear-gradient(135deg, var(--c-dark), var(--c-dark-secondary));
-            padding: 24px 32px;
-            color: var(--c-white);
-        }
-        .comparison-header h3 {
-            color: var(--c-white);
-            font-size: 1.2rem;
-        }
-        .comparison-header p {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.85rem;
-            margin: 4px 0 0;
-        }
-            .main-nav { display: none; }
-            .mobile-menu-btn { display: block; }
-            .nav-cta { display: none; }
-            .hero-stats { gap: 24px; flex-wrap: wrap; }
-    /* === END HEADER CSS === */
-
   * { margin:0;padding:0;box-sizing:border-box; }
   body { font-family:'Segoe UI', system-ui, -apple-system, sans-serif;background:#ffffff;color:#1A1A2E;line-height:1.6; }
   a { color:#0077B6;text-decoration:none;transition:color 0.2s; }
@@ -123,7 +19,7 @@
   .hero-chart p { font-size:1.05rem;color:#1A1A2Ecc;max-width:700px;margin:0 auto; }
   #chart-container { background:#f8fafc;border-radius:12px;padding:1.5rem;margin:2rem 0;border:1px solid #e2e8f0;position:relative; }
   #chart-container svg { width:100%;height:auto;display:block; }
-  .tooltip { position:absolute;padding:12px 16px;background:#1A1A2E;color:#fff;border-radius:8px;font-size:0.85rem;pointer-events:none;opacity:0;transition:opacity 0.2s;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:280px;line-height:1.5; }
+  .tooltip { position:fixed;padding:12px 16px;background:#1A1A2E;color:#fff;border-radius:8px;font-size:0.85rem;pointer-events:none;opacity:0;transition:opacity 0.2s;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:280px;line-height:1.5; }
   .tooltip.visible { opacity:1; }
   .tooltip strong { color:#00A896;display:block;margin-bottom:4px;font-size:0.95rem; }
   .legend { display:flex;gap:2rem;justify-content:center;margin:1rem 0;flex-wrap:wrap;font-size:0.85rem; }
@@ -151,35 +47,12 @@
 </script>
 </head>
 <body>
-<header class="site-header" role="banner">
-        <div class="header-inner">
-            <a href="/" class="brand" aria-label="Nano CBD Lab - Home">
-                <img src="/assets/logo.png" alt="Nano CBD Lab molecular logo" width="40" height="40" loading="eager"/>
-                <div class="brand-text">
-                    <span class="brand-name">Nano CBD Lab</span>
-                    <span class="brand-tagline">Quantifying Cannabinoid Bioavailability</span>
-                </div>
-            </a>
-            <nav class="main-nav" role="navigation" aria-label="Main navigation">
-                <ul>
-                    <li><a href="#research">Research</a></li>
-                    <li><a href="#analysis">Analysis</a></li>
-                    <li><a href="#particles">Particle Size</a></li>
-                    <li><a href="#bioavailability">Bioavailability</a></li>
-                    <li><a href="#methodology">Methodology</a></li>
-                    <li><a href="#citations">Publications</a></li>
-                    <li><a href="buyers-guide.html">Buyer's Guide</a></li>
-                    <li><a class="active" href="chart.html">Chart</a></li>
-                </ul>
-            </nav>
-            <a href="https://www.arkosbio.com" class="nav-cta" target="_blank" rel="noopener">Arkos Research →</a>
-            <button class="mobile-menu-btn" aria-label="Toggle mobile menu" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </header>
+<header style="background:#1A1A2E;padding:1rem 0;border-bottom:2px solid #0077B6;">
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;padding:0 2rem;">
+    <a href="/" style="color:#fff;font-size:1.4rem;font-weight:700;text-decoration:none;letter-spacing:2px;">NANO <span style="color:#0077B6;">CBD LAB</span></a>
+    <nav><ul style="display:flex;gap:1.5rem;list-style:none;margin:0;padding:0;"><li><a href="/">Home</a></li><li><a href="/#research">Research</a></li><li><a href="/#analysis">Analysis</a></li><li><a href="buyers-guide.html">Buyer's Guide</a></li><li><a href="/chart.html" class="active">Chart</a></li><li><a href="/#methodology">Methodology</a></li></ul></nav>
+  </div>
+</header>
 
 <div class="hero-chart">
   <h1>Nano CBD Particle Size vs. Bioavailability: Comparative Analytical Data</h1>
@@ -292,10 +165,10 @@ g.selectAll(".data-point").data(nanoData).enter().append("circle")
     d3.select(this).transition().duration(200).attr("r",rScale(d.pricePerMg||0.1)+6).attr("opacity",1);
     const price = d.pricePerMg ? `$${d.pricePerMg}/mg` : 'N/A';
     tooltip.html(`<strong>${d.brand}</strong>${d.brand.includes("Arkos")?' 🏆':''}<br/>📏 ${d.particleSize}nm particle size<br/>💉 ${d.bioavailability}% bioavailability<br/>💰 ${price}<br/>🧪 ${d.thcStatus}`)
-      .style("left",(event.pageX+15)+"px").style("top",(event.pageY-10)+"px").classed("visible",true);
+      .style("left",(event.clientX+15)+"px").style("top",(event.clientY-10)+"px").classed("visible",true);
   })
   .on("mousemove",function(event){
-    tooltip.style("left",(event.pageX+15)+"px").style("top",(event.pageY-10)+"px");
+    tooltip.style("left",(event.clientX+15)+"px").style("top",(event.clientY-10)+"px");
   })
   .on("mouseout",function(event,d){
     d3.select(this).transition().duration(200).attr("r",rScale(d.pricePerMg||0.1)).attr("opacity",d.brand.includes("Arkos")?1:0.75);
