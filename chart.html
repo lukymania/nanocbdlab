@@ -167,7 +167,7 @@
   <div class="hero-chart-content">
     <div class="hero-chart-badge">
       <span class="dot"></span>
-      Interactive D3.js Visualization
+      Interactive Visualization
     </div>
     <h1>Nano CBD <em>Comparison Chart</em></h1>
     <p>Particle size versus bioavailability analysis for 18 nano CBD formulations and 7 traditional controls. Dynamic light scattering data and pharmacokinetic absorption profiles.</p>
@@ -191,7 +191,7 @@
 
 <div id="chart-container">
   <svg id="scatter-plot" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet"></svg>
-  <div class="tooltip" id="tooltip" onmouseenter="clearTimeout(window._ttHide)" onmouseleave="window._ttHide=setTimeout(()=>document.getElementById('tooltip').classList.remove('visible'),500)"></div>
+
 </div>
 
 <div class="stats-bar">
@@ -365,5 +365,6 @@ svg.append("text").attr("x",vb.w/2).attr("y",vb.h-5).attr("text-anchor","middle"
   .text("Data: Independent lab analysis, COAs, peer-reviewed pharmacokinetic studies • Chart: nanocbdlab.com");
 </script>
 
+  <div class="tooltip" id="tooltip" onmouseenter="clearTimeout(window._ttHide)" onmouseleave="window._ttHide=setTimeout(()=>document.getElementById('tooltip').classList.remove('visible'),500)"></div>
 </body>
 </html>
