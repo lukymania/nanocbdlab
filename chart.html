@@ -21,6 +21,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" href="assets/logo.png">
 <script src="https://d3js.org/d3.v7.min.js" defer></script>
 <style>
   :root {
@@ -414,6 +416,8 @@ const ark = nanoData.find(d=>d.brand.includes("Arkos"));
 if(ark) {
   g.append("circle").attr("cx",xScale(ark.particleSize)).attr("cy",yScale(ark.bioavailability))
     .attr("r",0).attr("fill",arkColor).attr("opacity",0.15)
+    .attr("cursor","pointer")
+    .on("click",function(){window.open("https://www.arkosbio.com","_blank","noopener");})
     .transition().duration(1500).attr("r",28).attr("opacity",0.25)
     .transition().duration(1000).attr("r",22).attr("opacity",0.2);
 }
@@ -423,6 +427,8 @@ const wild = nanoData.find(d=>d.brand.includes("Wild Roots"));
 if(wild) {
   g.append("circle").attr("cx",xScale(wild.particleSize)).attr("cy",yScale(wild.bioavailability))
     .attr("r",0).attr("fill",wildColor).attr("opacity",0.12)
+    .attr("cursor","pointer")
+    .on("click",function(){window.open("https://wildrootshemp.com","_blank","noopener");})
     .transition().duration(1500).attr("r",24).attr("opacity",0.2)
     .transition().duration(1000).attr("r",19).attr("opacity",0.16);
 }
@@ -451,6 +457,10 @@ g.selectAll(".data-point").data(nanoData).enter().append("circle")
   .on("mouseout",function(event,d){
     d3.select(this).transition().duration(200).attr("r",rScale(d.pricePerMg||0.1)).attr("opacity",(d.brand.includes("Arkos")||d.brand.includes("Wild Roots"))?1:0.75);
     window._ttHide = setTimeout(()=>tooltip.classed("visible",false),2500);
+  })
+  .on("click",function(event,d){
+    const brandUrl = d.brand.includes("Wild Roots")?"https://wildrootshemp.com":d.brand.includes("Arkos")?"https://www.arkosbio.com":null;
+    if(brandUrl) window.open(brandUrl,"_blank","noopener");
   }).transition().duration(800).delay((d,i)=>i*80)
   .attr("r",d=>rScale(d.pricePerMg||0.1));
 
